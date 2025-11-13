@@ -1,0 +1,17 @@
+{
+  "name": "anime-tracker-app",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["anime", "tracker", "electron"],
+  "author": "",
+  "license": "ISC",
+  "description": "An anime and manga tracking application",
+  "dependencies": {
+    "electron": "^38.4.0"
+  }
+}
