@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AniTracker - Track Your Favorite Anime</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --primary: #8b5cf6;
+      --primary-hover: #7c3aed;
+      --background: #1e293b;
+      --surface: #334155;
+      --surface-hover: #475569;
+      --border: #475569;
+      --text-main: #f1f5f9;
+      --text-muted: #cbd5e1;
+      --text-light: #94a3b8;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.2);
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.3);
+      --shadow-lg: 0 10px 15px -3px rgba(139, 92, 246, 0.2);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--background);
+      color: var(--text-main);
+      overflow: hidden;
+      font-weight: 400;
+    }
+
+    /* Header */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 1.5rem;
+      position: relative;
+      z-index: 10;
+    }
+
+    header h1 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--primary);
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      letter-spacing: -0.5px;
+      background: #ffffff;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      color: var(--primary);
+      box-shadow: var(--shadow-sm);
+    }
+
+    header h1:hover {
+      color: var(--primary-hover);
+    }
+
+    .top-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .top-bar select,
+    .top-bar input {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.6rem 1rem;
+      font-size: 0.95rem;
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      transition: all 0.2s;
+      background: var(--background);
+      color: var(--text-main);
+      height: 42px;
+    }
+
+    .top-bar select {
+      min-width: 120px;
+    }
+
+    .top-bar input {
+      width: 220px;
+    }
+
+    .top-bar select:focus,
+    .top-bar input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.2);
+    }
+
+    .top-bar button {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 0.6rem 1.2rem;
+      font-size: 0.95rem;
+      font-weight: 500;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: all 0.2s;
+      height: 42px;
+    }
+
+    .top-bar button:hover {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+    }
+
+    .top-bar button:active {
+      transform: translateY(0);
+    }
+
+    /* Main Layout */
+    .main-layout {
+      display: flex;
+      gap: 24px;
+      height: calc(100vh - 75px);
+      padding: 24px;
+    }
+
+    /* Left Column */
+    .left-column {
+      flex: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      overflow: hidden;
+    }
+
+    .horizontal-section h2 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-light);
+    }
+
+    .horizontal-list {
+      display: flex;
+      gap: 18px;
+      overflow-x: auto;
+      padding-bottom: 10px;
+      scroll-snap-type: x mandatory;
+    }
+
+    .horizontal-list::-webkit-scrollbar {
+      height: 4px;
+    }
+
+    .horizontal-list::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .horizontal-list::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 2px;
+    }
+
+    .horizontal-list::-webkit-scrollbar-thumb:hover {
+      background: var(--text-light);
+    }
+
+    /* Right Column */
+    .right-column {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      padding-left: 24px;
+      border-left: 1px solid var(--border);
+    }
+
+    .right-column h2 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-light);
+    }
+
+    .vertical-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      overflow-y: auto;
+      padding-right: 6px;
+    }
+
+    .vertical-list::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .vertical-list::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .vertical-list::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 2px;
+    }
+
+    .vertical-list::-webkit-scrollbar-thumb:hover {
+      background: var(--text-light);
+    }
+
+    /* Anime Cards - Horizontal Scroll */
+    .horizontal-list .anime-card {
+      background: var(--surface);
+      border-radius: 10px;
+      flex: 0 0 auto;
+      width: min(170px, 90vw);
+      padding: 0;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 2px solid transparent;
+      overflow: hidden;
+      scroll-snap-align: start;
+    }
+
+    .horizontal-list .anime-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--primary);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .horizontal-list .anime-card img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      background: linear-gradient(135deg, #475569 0%, #334155 100%);
+    }
+
+    .horizontal-list .anime-card-content {
+      padding: 14px 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      min-height: 80px;
+    }
+
+    .horizontal-list .anime-card strong {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text-main);
+      line-height: 1.3;
+      height: 36px;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+
+    .horizontal-list .anime-info-line {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.3;
+    }
+
+    /* Anime Cards - Vertical Scroll */
+    .vertical-list .anime-card {
+      background: var(--surface);
+      border-radius: 8px;
+      padding: 12px;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border: 1px solid transparent;
+    }
+
+    .vertical-list .anime-card:hover {
+      transform: translateY(-1px);
+      background: var(--surface-hover);
+      border-color: var(--primary);
+    }
+
+    .vertical-list .anime-card img {
+      width: 60px;
+      height: 85px;
+      border-radius: 6px;
+      object-fit: cover;
+      flex-shrink: 0;
+      background: linear-gradient(135deg, #475569 0%, #334155 100%);
+    }
+
+    .vertical-list .anime-card-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .vertical-list .anime-card strong {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-main);
+      margin-bottom: 4px;
+      line-height: 1.3;
+    }
+
+    .vertical-list .anime-info-line {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      line-height: 1.2;
+    }
+
+    /* Section Indicators */
+    .section-indicator {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      background: var(--primary);
+      border-radius: 3px;
+      margin-right: 8px;
+    }
+
+    .section-indicator::before {
+      content: '';
+      display: block;
+      width: 8px;
+      height: 8px;
+      background: #f1f5f9;
+      border-radius: 1px;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .main-layout {
+        flex-direction: column;
+        height: auto;
+        overflow-y: auto;
+      }
+      
+      .right-column {
+        border-left: none;
+        border-top: 1px solid var(--border);
+        padding-left: 0;
+        padding-top: 24px;
+        max-height: 400px;
+      }
+      
+      .left-column {
+        gap: 24px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1 id="homeBtn">AniTracker</h1>
+  <div class="top-bar">
+    <select id="searchType">
+      <option value="anime">Anime</option>
+      <option value="manga">Manga</option>
+    </select>
+    <input type="text" id="animeInput" placeholder="Search anime or manga">
+    <button id="searchBtn">Search</button>
+    <button id="watchlistBtn">Watchlist</button>
+  </div>
+</header>
+
+<div class="main-layout">
+  <div class="left-column">
+    <div class="horizontal-section">
+      <h2><span class="section-indicator"></span>New Releases</h2>
+      <div id="newAnimeList" class="horizontal-list"></div>
+    </div>
+
+    <div class="horizontal-section">
+      <h2><span class="section-indicator"></span>Popular Now</h2>
+      <div id="favoritesList" class="horizontal-list"></div>
+    </div>
+  </div>
+
+  <div class="right-column">
+    <h2><span class="section-indicator"></span>Top Rated</h2>
+    <div id="highRatedList" class="vertical-list"></div>
+  </div>
+</div>
+
+<script src="index.js"></script>
+
+</body>
+</html>

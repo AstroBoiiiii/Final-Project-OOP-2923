@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AniTracker - Search</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #8b5cf6;
+            --primary-hover: #7c3aed;
+            --background: #1e293b;
+            --surface: #334155;
+            --surface-hover: #475569;
+            --border: #475569;
+            --text-main: #f1f5f9;
+            --text-muted: #cbd5e1;
+            --text-light: #94a3b8;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.2);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.3);
+            --shadow-lg: 0 10px 15px -3px rgba(139, 92, 246, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            padding: 20px;
+            margin: 0;
+            background: var(--background);
+            color: var(--text-main);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        header h1 {
+            margin: 0;
+            cursor: pointer;
+            color: var(--primary);
+            font-size: 1.5rem;
+            font-weight: 600;
+            background: #ffffff;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .top-bar {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .top-bar select,
+        .top-bar input {
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.6rem 1rem;
+            font-size: 0.95rem;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            transition: all 0.2s;
+            background: var(--surface);
+            color: var(--text-main);
+            height: 42px;
+        }
+
+        .top-bar select {
+            min-width: 120px;
+        }
+
+        .top-bar input {
+            width: 280px;
+        }
+
+        .top-bar select:focus,
+        .top-bar input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.2);
+        }
+
+        .top-bar button {
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 0.6rem 1.2rem;
+            font-size: 0.95rem;
+            font-weight: 500;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all 0.2s;
+            height: 42px;
+        }
+
+        .top-bar button:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        /* Page Title */
+        h2 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 20px;
+            padding-left: 0;
+        }
+
+        /* Search results grid */
+        .search-results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 20px;
+            padding: 20px 0;
+        }
+
+        .anime-card {
+            background: var(--surface);
+            border-radius: 10px;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: fit-content;
+            border: 2px solid transparent;
+            gap: 6px;
+            min-height: 380px;
+            justify-content: space-between;
+        }
+
+        .anime-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary);
+        }
+
+        .anime-card img {
+            width: 140px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .anime-title {
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: var(--text-main);
+            line-height: 1.3;
+            height: 40px;
+            overflow: hidden;
+            text-align: center;
+            width: 100%;
+            word-break: break-word;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .anime-info {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            line-height: 1.2;
+            text-align: center;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .anime-score {
+            background: var(--primary);
+            color: white;
+            padding: 3px 6px;
+            border-radius: 10px;
+            font-weight: 500;
+            display: inline-block;
+            font-size: 0.7rem;
+            line-height: 1;
+        }
+
+        .anime-episodes, .anime-status, .anime-type, .anime-year {
+            margin: 0;
+            padding: 2px 0;
+            line-height: 1.2;
+        }
+
+        .anime-status.airing { color: #10b981; font-weight: 500; }
+        .anime-status.complete { color: var(--text-muted); }
+        .anime-status.upcoming { color: #3b82f6; font-weight: 500; }
+
+        /* Loading and error states */
+        .loading, .error, .no-results {
+            text-align: center;
+            padding: 40px;
+            font-size: 1rem;
+            color: var(--text-light);
+            grid-column: 1 / -1;
+        }
+
+        .error {
+            color: #ef4444;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .top-bar {
+                width: 100%;
+                flex-wrap: wrap;
+            }
+            
+            .top-bar input {
+                width: 100%;
+                min-width: auto;
+            }
+            
+            .search-results-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 15px;
+            }
+            
+            .anime-card img {
+                width: 120px;
+                height: 170px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .search-results-grid {
+                grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+                gap: 12px;
+            }
+            
+            .anime-card {
+                padding: 12px;
+            }
+            
+            .anime-card img {
+                width: 100px;
+                height: 140px;
+            }
+            
+            .anime-title {
+                font-size: 0.8rem;
+            }
+            
+            .anime-info {
+                font-size: 0.75rem;
+            }
+        }
+        
+        .anime-score::before {
+            content: "⭐ ";
+        }
+
+        .anime-episodes::before {
+            content: "📺 ";
+        }
+
+        .anime-type::before {
+            content: "🎬 ";
+        }
+
+        .anime-year::before {
+            content: "📅 ";
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 id="homeBtn">AniTracker</h1>
+        <div class="top-bar">
+            <select id="searchType">
+                <option value="anime">Anime</option>
+                <option value="manga">Manga</option>
+            </select>
+            <input type="text" id="animeInput" placeholder="Search anime or manga">
+            <button id="searchBtn">Search</button>
+            <button id="watchlistBtn">Watchlist</button>
+        </div>
+    </header>
+    
+    <h2>Search Results</h2>
+    <div id="searchResults" class="search-results-grid"></div>
+
+    <script src="search.js"></script>
+</body>
+</html>
